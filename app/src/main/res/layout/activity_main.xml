@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="100dp"
+        android:textSize="20sp"
+        android:text="@string/microgv_serial_monitor"
+        android:textColor="#5F67B0"/>
+
+    <TextView
+        android:id="@+id/serial_monitor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:textSize="15sp"
+        android:layout_marginBottom="200dp"
+        android:gravity="bottom"    />
+    <!--        android:scrollbars = "vertical"-->
+
+    <Button
+        android:id="@+id/connectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:text="@string/connect"
+        android:background="@android:color/transparent"
+        android:textColor="#5F67B0"
+        android:onClick="connectToArduino"
+        android:layout_centerHorizontal="true"
+        tools:ignore="UsingOnClickInXml" />
+
+    <Button
+        android:id="@+id/disconnectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:text="@string/disconnect"
+        android:background="@android:color/transparent"
+        android:textColor="#5F67B0"
+        android:onClick="disconnectFromArduino"
+        android:layout_centerHorizontal="true"
+        tools:ignore="UsingOnClickInXml" />
+
+
+</RelativeLayout>

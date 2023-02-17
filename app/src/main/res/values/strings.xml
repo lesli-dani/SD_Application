@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="connect">Connect</string>
+    <string name="microgv_serial_monitor">MicRoGV Serial Monitor</string>
+    <string name="paired_devices">Get Paired Devices</string>
+    <string name="check_connection">Check Connection</string>
+    <string name="title_paired_devices" />
+    <string name="none_paired">No Paired Devices</string>
+    <string name="disconnect">Disconnect</string>
+</resources>

@@ -1,4 +1,7 @@
 <resources>
+    <string name="mppt_energy_system">MPPT ENERGY SYSTEM</string>
+
+
     <string name="app_name">My Application</string>
     <string name="connect">Connect</string>
     <string name="microgv_serial_monitor">MicRoGV Serial Monitor</string>
@@ -7,4 +10,17 @@
     <string name="title_paired_devices" />
     <string name="none_paired">No Paired Devices</string>
     <string name="disconnect">Disconnect</string>
+
+    <string name="status_check">System Status</string>
+    <string name="temperature">Temperature</string>
+    <string name="battery">Battery</string>
+    <string name="current">Current</string>
+    <string name="voltage">Voltage</string>
+    <string name="irradiance">Irradiance</string>
+    <string name="shutofftime">Estimated Shut-Off Time</string>
+
+    <string name="testtemp">95 F</string>
+
+
+
 </resources>

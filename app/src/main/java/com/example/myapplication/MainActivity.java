@@ -23,7 +23,7 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
     static final UUID mUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private BluetoothSocket btSocket;
-    private TextView SerialMonitor;
+    private TextView SerialMonitor, Serial2;
     private final Handler myHandler = new Handler();
     private InputStream inputStream;
     @RequiresApi(api = Build.VERSION_CODES.S)
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         btSocket = null;
         SerialMonitor = (TextView) findViewById(R.id.serial_monitor);
+        Serial2 = (TextView) findViewById(R.id.ah_yes);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.S)
@@ -92,7 +93,16 @@ public class MainActivity extends AppCompatActivity {
                         byteChar = (char) b;
                         S.append(byteChar);
                     }
-                    SerialMonitor.append(S.toString());
+
+                    //allText is gonna be the characters up to the new line
+                    String allText = S.toString();
+                    String[] sText = allText.split(",");
+
+                    //send data to textview with id serial_monitor
+                    SerialMonitor.append(sText[0]);
+                    SerialMonitor.append(System.getProperty("line.separator"));
+
+                    Serial2.append(allText);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

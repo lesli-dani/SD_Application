@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -42,7 +44,6 @@ public class Information extends AppCompatActivity {
     private String sunsetTime;
     private SimpleDateFormat sdf;
     private TimeZone utcTZ;
-    private TimeZone centralTZ;
     private Calendar sunriseCal;
     private Calendar sunsetCal;
     private Calendar currentCal;
@@ -65,7 +66,6 @@ public class Information extends AppCompatActivity {
 
         // Set up time zone and date format
         utcTZ = TimeZone.getTimeZone("UTC");
-        centralTZ = TimeZone.getTimeZone("US/Central");
         sdf = new SimpleDateFormat("hh:mm:ss a");
 
         // Set up calendar objects
@@ -76,7 +76,9 @@ public class Information extends AppCompatActivity {
         // Get sunrise and sunset times from API
         getSunriseSunsetData();
 
-        Irradiance.setText("812.4");
+        //Get irradiance from API
+        getIrradiance();
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.S)
@@ -96,8 +98,7 @@ public class Information extends AppCompatActivity {
                 btSocket = hc05.createRfcommSocketToServiceRecord(mUUID);
 
                 btSocket.connect();
-                if(btSocket.isConnected())
-                {
+                if (btSocket.isConnected()) {
                     Toast.makeText(getApplicationContext(), "Connection Successful!", Toast.LENGTH_SHORT).show();
                     try {
                         inputStream = btSocket.getInputStream();
@@ -107,8 +108,7 @@ public class Information extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                }
-                else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Bluetooth Could Not Connect!", Toast.LENGTH_SHORT).show();
                 }
 
@@ -131,7 +131,7 @@ public class Information extends AppCompatActivity {
                     StringBuilder S = new StringBuilder();
                     byte b;
                     char byteChar = 'z';
-                    while(byteChar != '\n') {
+                    while (byteChar != '\n') {
                         b = (byte) inputStream.read();
                         byteChar = (char) b;
                         S.append(byteChar);
@@ -176,17 +176,13 @@ public class Information extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.S)
     public void disconnectFromArduino(View view) {
 
-        if(btSocket != null)
-        {
-            if(btSocket.isConnected()){
+        if (btSocket != null) {
+            if (btSocket.isConnected()) {
                 try {
                     btSocket.close();
-                    if(!btSocket.isConnected())
-                    {
+                    if (!btSocket.isConnected()) {
                         Toast.makeText(getApplicationContext(), "Bluetooth was Disconnected!", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
+                    } else {
                         Toast.makeText(getApplicationContext(), "Bluetooth Could Not Disconnect!", Toast.LENGTH_SHORT).show();
                     }
                 } catch (IOException e) {
@@ -194,10 +190,7 @@ public class Information extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Bluetooth Could Not Disconnect!", Toast.LENGTH_SHORT).show();
                 }
             }
-        }
-
-        else
-        {
+        } else {
             Toast.makeText(getApplicationContext(), "No Connected BT Device To Disconnect From!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -243,7 +236,7 @@ public class Information extends AppCompatActivity {
                         } else {
                             // If it's after sunset, display sunrise time for the next day
                             String nextURL = "https://api.sunrise-sunset.org/json?lat=25.901747&lng=-97.497482&date=tomorrow";
-                            @SuppressLint("SetTextI18n") JsonObjectRequest newJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                            @SuppressLint("SetTextI18n") JsonObjectRequest newJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, nextURL, null,
                                     answer -> {
                                         try {
                                             // Parse sunrise and sunset times from API answer
@@ -271,19 +264,93 @@ public class Information extends AppCompatActivity {
                         }
 
                     } catch (JSONException e) {
-                        Toast.makeText(getApplicationContext(), "Error retrieving data.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error retrieving Sunrise data.", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     } catch (ParseException e) {
                         Toast.makeText(getApplicationContext(), "Unable to determine current time.", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }, error -> {
-            Toast.makeText(getApplicationContext(), "Error retrieving data!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Error retrieving Sunrise data!", Toast.LENGTH_SHORT).show();
             error.printStackTrace();
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(jsonObjectRequest);
     }
+
+    private void getIrradiance() {
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://api.solcast.com.au/world_radiation/estimated_actuals?latitude=25.893907&longitude=-97.48691&output_parameters=ghi&format=json&api_key=Azvpit04Ws4BuY5jI8_4l-3KcGPJ-BGi&timezone=America%2FChicago";
+
+        // Make a GET request to the API
+        @SuppressLint("SetTextI18n") JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        String responseStr = response.toString();
+                        JSONObject jsonObject = new JSONObject(responseStr);
+                        JSONArray estimatedActuals = jsonObject.getJSONArray("estimated_actuals");
+                        for (int i = 0; i < estimatedActuals.length(); i++) {
+                            JSONObject obj = estimatedActuals.getJSONObject(i);
+                            String periodEnd = obj.getString("period_end");
+                            double ghi = obj.getDouble("ghi");
+                            if (isWithinCurrentDayAndInterval(periodEnd)) {
+                                Irradiance.setText(ghi + " W/m^2");
+                                return;
+                            }
+                        }
+
+                    } catch (JSONException e) {
+                        Toast.makeText(getApplicationContext(), "Error retrieving ghi irradiance data!", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    } catch (ParseException e) {
+                        Toast.makeText(getApplicationContext(), "Error retrieving ghi data!", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    Toast.makeText(getApplicationContext(), "Error retrieving Irradiance data!", Toast.LENGTH_SHORT).show();
+                    error.printStackTrace();
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        queue.add(jsonObjectRequest);
+    }
+
+    private static boolean isWithinCurrentDayAndInterval(String dateTimeStr) throws ParseException {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date dateTime = sdf.parse(dateTimeStr);
+
+        TimeZone timeZone = TimeZone.getTimeZone("America/Chicago");
+        Calendar calendar = Calendar.getInstance(timeZone);
+        Date currentDate = calendar.getTime();
+
+        // Check if the date is within the current day
+        calendar.setTime(currentDate);
+        int currentDay = calendar.get(Calendar.DAY_OF_YEAR);
+        assert dateTime != null;
+        calendar.setTime(dateTime);
+        int dateDay = calendar.get(Calendar.DAY_OF_YEAR);
+        if (currentDay != dateDay) {
+            return false;
+        }
+
+        // Check if the time is within the current 30-minute interval
+        int currentMinute = calendar.get(Calendar.MINUTE);
+        int currentIntervalStartMinute = currentMinute - currentMinute % 30;
+        calendar.set(Calendar.MINUTE, currentIntervalStartMinute);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        Date intervalStartDate = calendar.getTime();
+        Date intervalEndDate = new Date(intervalStartDate.getTime() + 30 * 60 * 1000);
+
+        return (currentDate.after(intervalStartDate) || currentDate.equals(intervalStartDate)) && currentDate.before(intervalEndDate);
+    }
+
+
 }
 
 

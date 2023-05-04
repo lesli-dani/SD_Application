@@ -110,6 +110,19 @@
         />
 
     <TextView
+        android:id="@+id/batteryText"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="218dp"
+        android:layout_marginTop="340dp"
+        android:fontFamily="@font/andika"
+        android:gravity="center|top"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:text=""/>
+
+    <TextView
         android:id="@+id/current"
         android:layout_width="135dp"
         android:layout_height="115dp"
@@ -118,7 +131,7 @@
         android:background="@drawable/rounded_corner"
         android:fontFamily="@font/andika"
         android:gravity="center|top"
-        android:text="Solar Panel Current"
+        android:text="Solar Panel"
         android:textColor="@color/black"
         android:textSize="12dp"
         android:textAlignment="center"
@@ -129,11 +142,11 @@
         />
 
     <TextView
-        android:id="@+id/currentText"
+        android:id="@+id/solarPanel"
         android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginStart="38dp"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="490dp"
         android:fontFamily="@font/andika"
         android:gravity="center|top"
         android:textAlignment="center"
@@ -151,7 +164,7 @@
         android:backgroundTint="@color/white"
         android:fontFamily="@font/andika"
         android:gravity="center|top"
-        android:text="SOLAR PANEL VOLTAGE"
+        android:text="OUTPUT"
         android:textColor="@color/black"
         android:textSize="12dp"
         android:textAlignment="center"
@@ -162,11 +175,11 @@
         />
 
     <TextView
-        android:id="@+id/voltageText"
+        android:id="@+id/output"
         android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginStart="218dp"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="490dp"
         android:fontFamily="@font/andika"
         android:gravity="center|top"
         android:textAlignment="center"
@@ -194,6 +207,19 @@
         />
 
     <TextView
+        android:id="@+id/irradiance"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="650dp"
+        android:fontFamily="@font/andika"
+        android:gravity="center|top"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:text=""/>
+
+    <TextView
         android:id="@+id/button6"
         android:layout_width="135dp"
         android:layout_height="115dp"
@@ -211,5 +237,16 @@
         android:backgroundTint="@color/white"
         android:letterSpacing="0.09"
         />
-
+    <TextView
+        android:id="@+id/sunTime"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="218dp"
+        android:layout_marginTop="660dp"
+        android:fontFamily="@font/andika"
+        android:gravity="center|top"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:text=""/>
 </RelativeLayout>

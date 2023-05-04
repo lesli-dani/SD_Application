@@ -2,7 +2,7 @@
     <string name="mppt_energy_system">MPPT ENERGY SYSTEM</string>
 
 
-    <string name="app_name">My Application</string>
+    <string name="app_name">MicRoGV</string>
     <string name="connect">Connect</string>
     <string name="microgv_serial_monitor">MicRoGV Serial Monitor</string>
     <string name="paired_devices">Get Paired Devices</string>

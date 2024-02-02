@@ -3,6 +3,8 @@ September 2022 - May 2023
 This is the code for a Senior Design Application for a system created by Team MicRoGV.
 The team consisted of two Computer Engineers and two Electrical Engineers.
 
+[Final Report Link](https://drive.google.com/file/d/1LxyY8VTGCXM4ak5-AJF9B4V6xfSVGiRc/view?usp=sharing)
+
 Final Application:
 <br>
 Splash Screen:
